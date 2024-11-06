@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: spring-boot-app
+    env: docker
+    plan: starter
+    buildCommand: ./mvnw package -DskipTests
+    startCommand: java -jar /app/SecurityConfig-0.0.1-SNAPSHOT.jar
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://mysql-db:3306/abc
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: root
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.MySQL8Dialect
+    healthCheckPath: /
+
+databases:
+  - name: mysql-db
+    databaseType: mysql
+    plan: starter
+    region: oregon
+    user: root
+    password: root
+    databaseName: abc
